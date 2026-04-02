@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 // Datos simulados (Variables de nivel superior para acceso global)
 val avatarUrl: String? = null
 val userBio: String? = "Desarrollador Android en Formación."
-val followerCount: Int? = 1500
+val followerCount: String = "-1500"
 
 class MainActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,11 +40,18 @@ fun UserProfileScreen() {
     // 1. Manejo seguro de nulidad con el Operador Elvis (?:)
     val bioDisplay = userBio ?: "Biografía no Disponible."
 
+    // 1.5. EXTRA: Manejar Valores de Seguidores negativos o letras
+
+    // Manejo de Letras en vez de números y manejo de valores negativos
+
+    val followerCountNumero: Int = followerCount.toIntOrNull()?.takeIf { it >= 0} ?: 0
+
+
     // 2. 'when' como expresión para lógica de colores
     val statusColor = when {
-        followerCount == null -> Color.Gray
-        followerCount > 1000 -> Color(0xFFFD700) // Dorado
-        followerCount > 100 -> Color.Blue
+        followerCountNumero == null -> Color.Gray
+        followerCountNumero > 1000 -> Color(0xFFFFD700) // Dorado
+        followerCountNumero > 100 -> Color.Blue
         else -> Color.DarkGray
     }
 
@@ -65,7 +72,7 @@ fun UserProfileScreen() {
 
         // Llamada segura (?.) para mostrar el número de seguidores
         Text (
-            text = "Seguidores: ${followerCount ?: 0}",
+            text = "Seguidores: ${followerCountNumero ?: 0}",
             color = statusColor,
             style = MaterialTheme.typography.headlineSmall,
         )
